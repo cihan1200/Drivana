@@ -16,11 +16,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.2rem 5rem;
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   transition: border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateZ(0);
-  will-change: border-radius, backdrop-filter;
+  will-change: border-radius;
 }
 
 .scrolledHeader {
