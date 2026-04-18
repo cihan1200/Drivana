@@ -1,0 +1,375 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rem;
+  min-height: 80vh;
+  gap: 4rem;
+}
+
+.sloganContainer {
+  flex: 1;
+}
+
+.slogan {
+  font-size: 6rem;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  color: #1a1a1a;
+}
+
+.adjunctWrapper {
+  border-bottom: 13px solid rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  line-height: 1;
+}
+
+.adjunctText {
+  display: inline-block;
+  background-image: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.letter {
+  display: inline-block;
+  animation: slideUpBlur 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sliderContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  position: relative;
+}
+
+.sliderWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: #e9e8e4;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 20px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 24px 48px rgba(0, 0, 0, 0.08);
+  transform: translateZ(0);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.carImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sliderWrapper:hover .carImage {
+  transform: scale(1.04);
+}
+
+.carOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.carTag {
+  align-self: flex-start;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(76, 76, 76, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.65rem;
+  border-radius: 20px;
+}
+
+.carInfo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.carMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.carModel {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.carYear {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.carPrice {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.navArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
+}
+
+.navArrow svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.sliderWrapper:hover .navArrow {
+  opacity: 1;
+}
+
+.navPrev {
+  left: 1rem;
+}
+
+.navNext {
+  right: 1rem;
+}
+
+.navArrow:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.navPrev:hover {
+  transform: translateY(-50%) scale(1.08) translateX(-2px);
+}
+
+.navNext:hover {
+  transform: translateY(-50%) scale(1.08) translateX(2px);
+}
+
+.slideCounter {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  z-index: 3;
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  pointer-events: none;
+}
+
+.counterCurrent {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.counterSep {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0.1rem;
+}
+
+.counterTotal {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.progressTrack {
+  display: flex;
+  gap: 6px;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.progressSegment {
+  flex: 1;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  padding-block: 8px;
+  margin-block: -8px;
+  background-clip: content-box;
+  transition: opacity 0.2s ease;
+}
+
+.progressSegment:hover {
+  opacity: 0.75;
+}
+
+.progressFill {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #1a1a1a;
+  border-radius: 2px;
+  transform-origin: left;
+}
+
+.progressFill.progressDone {
+  width: 100%;
+}
+
+.progressFill.progressActive {
+  animation: fillBar 3s linear forwards;
+}
+
+@keyframes slideUpBlur {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(25px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes fillBar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    padding: 0 4rem;
+    gap: 3rem;
+  }
+
+  .slogan {
+    font-size: 4.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    padding: 4rem 2rem 3rem;
+    min-height: unset;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+
+  .sloganContainer {
+    flex: unset;
+    width: 100%;
+  }
+
+  .slogan {
+    font-size: 3.5rem;
+    letter-spacing: -1px;
+  }
+
+  .adjunctWrapper {
+    border-bottom-width: 9px;
+  }
+
+  .sliderContainer {
+    max-width: 100%;
+    width: 100%;
+    flex: unset;
+  }
+
+  .frameAccent {
+    top: 10px;
+    left: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3rem 1.5rem 2.5rem;
+    gap: 2.5rem;
+  }
+
+  .slogan {
+    font-size: 2.8rem;
+    letter-spacing: -0.5px;
+  }
+
+  .adjunctWrapper {
+    border-bottom-width: 7px;
+  }
+
+  .carModel {
+    font-size: 0.85rem;
+  }
+
+  .carPrice {
+    font-size: 0.95rem;
+  }
+}
