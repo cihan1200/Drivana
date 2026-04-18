@@ -1,10 +1,74 @@
 .hero {
   display: flex;
+  flex-direction: column;
+  padding: 4rem 8rem;
+  gap: 4rem;
+}
+
+.top {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8rem;
-  min-height: 80vh;
-  gap: 4rem;
+  width: 100%;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.formContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+label {
+  letter-spacing: -0.5px;
+  opacity: 0.65;
+}
+
+input {
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.pickupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dateContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dateContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.returnDateContainer {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.returnDateContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sloganContainer {
@@ -42,7 +106,7 @@
 }
 
 .sliderContainer {
-  flex: 1;
+  flex: 2;
   display: flex;
   flex-direction: column;
   max-width: 600px;
@@ -282,6 +346,56 @@
   animation: fillBar 3s linear forwards;
 }
 
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 0.95rem 1.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  width: max-content;
+  align-self: flex-end;
+}
+
+.ctaButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: inherit;
+}
+
+.ctaButton:hover::before {
+  opacity: 1;
+}
+
+.ctaButton span,
+.ctaButton svg {
+  position: relative;
+  z-index: 1;
+}
+
+.ctaArrow {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ctaButton:hover .ctaArrow {
+  transform: translateX(4px);
+}
+
 @keyframes slideUpBlur {
   0% {
     opacity: 0;
@@ -305,8 +419,13 @@
 }
 
 @media (max-width: 1024px) {
+  .top {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
   .hero {
-    padding: 0 4rem;
+    padding: 6rem 4rem;
     gap: 3rem;
   }
 

@@ -73,124 +73,170 @@ export default function Hero() {
 
   return (
     <div className={styles.hero}>
-      <div className={styles.sloganContainer}>
-        <span className={styles.slogan}>
-          Drive your car with
-          <br />
-          <span className={styles.adjunctWrapper}>
-            <i key={currentIndex} className={styles.adjunctText}>
-              {currentWord.split("").map((char, index) => (
-                <span
-                  key={index}
-                  className={styles.letter}
-                  style={{ animationDelay: `${index * 0.03}s` }}
-                >
-                  {char}
-                </span>
-              ))}
-            </i>
+      <div className={styles.top}>
+        <div className={styles.sloganContainer}>
+          <span className={styles.slogan}>
+            Drive your car with
+            <br />
+            <span className={styles.adjunctWrapper}>
+              <i key={currentIndex} className={styles.adjunctText}>
+                {currentWord.split("").map((char, index) => (
+                  <span
+                    key={index}
+                    className={styles.letter}
+                    style={{ animationDelay: `${index * 0.03}s` }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </i>
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
 
-      <div className={styles.sliderContainer}>
-        <div
-          className={styles.sliderWrapper}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {CAR_DATA.map((car, index) => (
-            <div
-              key={index}
-              className={`${styles.slide} ${index === currentCarIndex ? styles.active : ""}`}
-            >
-              <img
-                src={car.image}
-                alt={car.model}
-                className={styles.carImage}
-                fetchpriority={index === 0 ? "high" : "auto"}
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
-              <div className={styles.carOverlay}>
-                <div className={styles.carTag}>{car.tag}</div>
-                <div className={styles.carInfo}>
-                  <div className={styles.carMeta}>
-                    <span className={styles.carModel}>{car.model}</span>
-                    <span className={styles.carYear}>{car.year}</span>
+        <div className={styles.sliderContainer}>
+          <div
+            className={styles.sliderWrapper}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {CAR_DATA.map((car, index) => (
+              <div
+                key={index}
+                className={`${styles.slide} ${index === currentCarIndex ? styles.active : ""}`}
+              >
+                <img
+                  src={car.image}
+                  alt={car.model}
+                  className={styles.carImage}
+                  fetchpriority={index === 0 ? "high" : "auto"}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+                <div className={styles.carOverlay}>
+                  <div className={styles.carTag}>{car.tag}</div>
+                  <div className={styles.carInfo}>
+                    <div className={styles.carMeta}>
+                      <span className={styles.carModel}>{car.model}</span>
+                      <span className={styles.carYear}>{car.year}</span>
+                    </div>
+                    <span className={styles.carPrice}>{car.price}</span>
                   </div>
-                  <span className={styles.carPrice}>{car.price}</span>
                 </div>
               </div>
+            ))}
+
+            <button
+              className={`${styles.navArrow} ${styles.navPrev}`}
+              onClick={goToPrev}
+              aria-label="Previous"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  d="M15 18l-6-6 6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              className={`${styles.navArrow} ${styles.navNext}`}
+              onClick={goToNext}
+              aria-label="Next"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  d="M9 18l6-6-6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div className={styles.slideCounter}>
+              <span className={styles.counterCurrent}>
+                {padded(currentCarIndex)}
+              </span>
+              <span className={styles.counterSep}>/</span>
+              <span className={styles.counterTotal}>
+                {padded(CAR_DATA.length - 1)}
+              </span>
             </div>
-          ))}
+          </div>
 
-          <button
-            className={`${styles.navArrow} ${styles.navPrev}`}
-            onClick={goToPrev}
-            aria-label="Previous"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                d="M15 18l-6-6 6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-          <button
-            className={`${styles.navArrow} ${styles.navNext}`}
-            onClick={goToNext}
-            aria-label="Next"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                d="M9 18l6-6-6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          <div className={styles.progressTrack}>
+            {CAR_DATA.map((_, index) => (
+              <button
+                key={index}
+                className={styles.progressSegment}
+                onClick={() => goToIndex(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              >
+                <span
+                  className={`${styles.progressFill} ${
+                    index === currentCarIndex ? styles.progressActive : ""
+                  } ${index < currentCarIndex ? styles.progressDone : ""}`}
+                  key={index === currentCarIndex ? progressKey : index}
+                  style={{
+                    animationPlayState: isPaused ? "paused" : "running",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-          <div className={styles.slideCounter}>
-            <span className={styles.counterCurrent}>
-              {padded(currentCarIndex)}
-            </span>
-            <span className={styles.counterSep}>/</span>
-            <span className={styles.counterTotal}>
-              {padded(CAR_DATA.length - 1)}
-            </span>
+      <div className={styles.bottom}>
+        <div className={styles.formContainer}>
+          <div className={styles.pickupContainer}>
+            <label htmlFor="pickup">Collection point</label>
+            <input type="text" id="pickup" />
+          </div>
+
+          <div className={styles.dateContainer}>
+            <label htmlFor="pickupDate">Pick-up date & time</label>
+            <div>
+              <input type="date" id="pickupDate" />
+              <input type="time" />
+            </div>
+          </div>
+
+          <div className={styles.returnDateContainer}>
+            <label htmlFor="returnDate">Return date & time</label>
+            <div>
+              <input type="date" id="returnDate" />
+              <input type="time" />
+            </div>
           </div>
         </div>
 
-        <div className={styles.progressTrack}>
-          {CAR_DATA.map((_, index) => (
-            <button
-              key={index}
-              className={styles.progressSegment}
-              onClick={() => goToIndex(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            >
-              <span
-                className={`${styles.progressFill} ${
-                  index === currentCarIndex ? styles.progressActive : ""
-                } ${index < currentCarIndex ? styles.progressDone : ""}`}
-                key={index === currentCarIndex ? progressKey : index}
-                style={{ animationPlayState: isPaused ? "paused" : "running" }}
-              />
-            </button>
-          ))}
-        </div>
+        <button className={styles.ctaButton}>
+          <span>Select my car</span>
+          <svg
+            className={styles.ctaArrow}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              d="M5 12h14M12 5l7 7-7 7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   );

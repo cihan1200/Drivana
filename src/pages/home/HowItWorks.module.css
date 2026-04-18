@@ -1,5 +1,5 @@
 .section {
-  padding: 8rem 8rem 10rem;
+  padding: 4rem 8rem;
   position: relative;
   overflow: hidden;
 }
@@ -242,7 +242,7 @@
 
 @media (max-width: 1024px) {
   .section {
-    padding: 6rem 4rem 7rem;
+    padding: 6rem 4rem;
   }
 
   .heading {
