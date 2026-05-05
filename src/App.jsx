@@ -1,11 +1,55 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import CarDetailsPage from "./pages/car_details/CarDetailsPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import ServerWakeUp from "./components/server_wakeup/ServerWakeup";
+import axiosApi from "./api/axiosApi";
 
 export default function App() {
+  const [isServerReady, setIsServerReady] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const wakeUpServer = async () => {
+      try {
+        await axiosApi.get("/");
+
+        if (isMounted) {
+          setIsServerReady(true);
+        }
+      } catch (error) {
+        console.error("Failed to reach server:", error);
+        if (isMounted) {
+          setHasError(true);
+        }
+      }
+    };
+
+    wakeUpServer();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (hasError) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <h2>Oops! Something went wrong.</h2>
+        <p>We couldn't connect to the server. Please try refreshing.</p>
+      </div>
+    );
+  }
+
+  if (!isServerReady) {
+    return <ServerWakeUp />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>

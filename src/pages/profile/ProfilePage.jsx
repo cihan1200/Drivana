@@ -539,9 +539,7 @@ export default function ProfilePage() {
             <div className={styles.card}>
               <div className={styles.avatarSection}>
                 <div className={styles.avatarLarge}>
-                  {isUploadingPhoto ? (
-                    <div className={styles.spinnerDark}></div>
-                  ) : formData.profilePhoto ? (
+                  {formData.profilePhoto ? (
                     <img
                       src={formData.profilePhoto}
                       alt="Profile"
@@ -549,6 +547,12 @@ export default function ProfilePage() {
                     />
                   ) : (
                     initials
+                  )}
+
+                  {isUploadingPhoto && (
+                    <div className={styles.spinnerOverlay}>
+                      <div className={styles.spinnerDark}></div>
+                    </div>
                   )}
 
                   <input
