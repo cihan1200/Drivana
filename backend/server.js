@@ -9,14 +9,12 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://drivana-flame.vercel.app/",
+  "https://drivana-flame.vercel.app",
 ];
 
-app.use(cors({ origin: "http://localhost:5173" }));
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -28,6 +26,9 @@ app.use(
     },
   }),
 );
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.json({ message: "Server is running." });
