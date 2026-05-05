@@ -1,0 +1,229 @@
+.featuredFleet {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: #f7f6f2;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 1.5rem;
+}
+
+.title {
+  font-size: 1.85rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.pageIndicator {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 400;
+}
+
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card:hover {
+  .carImage {
+    opacity: 0.75;
+  }
+}
+
+.carImage {
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.carName {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.carYearAndScore {
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.starIcon {
+  color: #ffbb5c;
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2.5px solid #d1d1ce;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorText {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.retryButton {
+  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  border: 1.5px solid #333;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #333;
+  color: #f7f6f2;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+}
+
+.paginationArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1.5px solid #d1d1ce;
+  background: transparent;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.paginationArrow:hover:not(:disabled) {
+  background-color: #333;
+  border-color: #333;
+  color: #f7f6f2;
+}
+
+.paginationArrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.paginationItems {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pageNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.35rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.pageNumber:hover:not(.pageNumberActive) {
+  background-color: #e9e8e4;
+  color: #333;
+}
+
+.pageNumberActive {
+  background-color: #333;
+  color: #f7f6f2;
+  font-weight: 500;
+  cursor: default;
+}
+
+.ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  font-size: 0.8rem;
+  color: #aaa;
+  user-select: none;
+}
+
+@media (max-width: 1200px) {
+  .featuredFleet {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .cardsContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .cardsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+}

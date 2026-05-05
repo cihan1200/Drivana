@@ -1,7 +1,8 @@
 import styles from "./HomePage.module.css";
 import Header from "../../components/header/Header";
 import Hero from "./Hero";
-import HowItWorks from "./HowItWorks";
+import FeaturedFleet from "./FeaturedFleet";
+import Footer from "../../components/footer/Footer";
 
 export default function HomePage() {
   return (
@@ -9,7 +10,8 @@ export default function HomePage() {
       <div className={styles.homePage}>
         <Header />
         <Hero />
-        <HowItWorks />
+        <FeaturedFleet />
+        <Footer />
       </div>
     </>
   );

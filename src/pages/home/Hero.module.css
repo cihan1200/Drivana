@@ -1,494 +1,288 @@
 .hero {
-  display: flex;
-  flex-direction: column;
-  padding: 4rem 8rem;
-  gap: 4rem;
+  padding: 6rem 3rem;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url("../../assets/hero-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-.top {
+.heroContent {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 5rem;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem 2rem;
-  border-radius: 20px;
-  box-shadow:
-    0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.formContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-label {
-  letter-spacing: -0.5px;
-  opacity: 0.65;
-}
-
-input {
-  border-radius: 8px;
-  outline: none;
-  border: none;
-  padding: 0.5rem 1rem;
-}
-
-.pickupContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.dateContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.dateContainer > div {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.returnDateContainer {
-  gap: 0.5rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.returnDateContainer > div {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.sloganContainer {
+.heroText {
   flex: 1;
+  padding-top: 1rem;
 }
 
-.slogan {
-  font-size: 6rem;
-  letter-spacing: -1.5px;
-  line-height: 1.1;
-  color: #1a1a1a;
-}
-
-.adjunctWrapper {
-  border-bottom: 13px solid rgba(0, 0, 0, 0.1);
+.eyebrow {
   display: inline-block;
-  line-height: 1;
-}
-
-.adjunctText {
-  display: inline-block;
-  background-image: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.letter {
-  display: inline-block;
-  animation: slideUpBlur 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  background: inherit;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.sliderContainer {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  max-width: 600px;
-  position: relative;
-}
-
-.sliderWrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background-color: #e9e8e4;
-  cursor: pointer;
-  z-index: 1;
-  border-radius: 20px;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.1),
-    0 24px 48px rgba(0, 0, 0, 0.08);
-  transform: translateZ(0);
-}
-
-.slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.slide.active {
-  opacity: 1;
-  z-index: 1;
-}
-
-.carImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.sliderWrapper:hover .carImage {
-  transform: scale(1.04);
-}
-
-.carOverlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1.25rem;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.55) 100%
-  );
-}
-
-.carTag {
-  align-self: flex-start;
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(76, 76, 76, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.3rem 0.65rem;
+  color: #666;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.headline {
+  font-size: clamp(3.5rem, 5vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+  font-weight: 500;
+}
+
+.headline em {
+  font-style: italic;
+  text-decoration: underline;
+  text-decoration-color: #ffbb5c;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 4px;
+}
+
+.subtext {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #f7f6f2;
+  margin: 0;
+}
+
+.rentalForm {
+  flex: 1.2;
+  background-color: #ffffff;
   border-radius: 20px;
+  padding: 2rem;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.carInfo {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.carMeta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.carModel {
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #ffffff;
-}
-
-.carYear {
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 1px;
-}
-
-.carPrice {
-  font-size: 1.1rem;
-  font-weight: 300;
-  color: #ffffff;
-  letter-spacing: -0.5px;
-}
-
-.navArrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #ffffff;
-  cursor: pointer;
+.formHeader {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  opacity: 0;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.navArrow svg {
-  width: 16px;
-  height: 16px;
+.formTitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggleTrack {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 50px;
+  transition: background-color 0.25s ease;
   flex-shrink: 0;
 }
 
-.sliderWrapper:hover .navArrow {
-  opacity: 1;
+.toggle input:checked ~ .toggleTrack {
+  background-color: #ffbb5c;
 }
 
-.navPrev {
-  left: 1rem;
-}
-
-.navNext {
-  right: 1rem;
-}
-
-.navArrow:hover {
-  background: rgba(255, 255, 255, 0.28);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-50%) scale(1.08);
-}
-
-.navPrev:hover {
-  transform: translateY(-50%) scale(1.08) translateX(-2px);
-}
-
-.navNext:hover {
-  transform: translateY(-50%) scale(1.08) translateX(2px);
-}
-
-.slideCounter {
+.toggleThumb {
   position: absolute;
-  top: 1.1rem;
-  right: 1.1rem;
-  z-index: 3;
-  display: flex;
-  align-items: baseline;
-  gap: 0.2rem;
-  pointer-events: none;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.counterCurrent {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: 0.5px;
+.toggle input:checked ~ .toggleTrack .toggleThumb {
+  transform: translateX(16px);
 }
 
-.counterSep {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.35);
-  margin: 0 0.1rem;
-}
-
-.counterTotal {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.5px;
-}
-
-.progressTrack {
-  display: flex;
-  gap: 6px;
-  margin-top: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-.progressSegment {
-  flex: 1;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.1);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-radius: 2px;
-  padding-block: 8px;
-  margin-block: -8px;
-  background-clip: content-box;
-  transition: opacity 0.2s ease;
-}
-
-.progressSegment:hover {
-  opacity: 0.75;
-}
-
-.progressFill {
-  position: absolute;
-  top: 8px;
-  left: 0;
-  height: 2px;
-  width: 0%;
-  background: #1a1a1a;
-  border-radius: 2px;
-  transform-origin: left;
-}
-
-.progressFill.progressDone {
-  width: 100%;
-}
-
-.progressFill.progressActive {
-  animation: fillBar 3s linear forwards;
-}
-
-.ctaButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  padding: 0.95rem 1.75rem;
-  border-radius: 50px;
-  font-size: 0.85rem;
+.toggleLabel {
+  font-size: 0.75rem;
+  color: #666;
   font-weight: 500;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
-  width: max-content;
-  align-self: flex-end;
 }
 
-.ctaButton::before {
-  content: "";
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #f97316, #ec4899, #8b5cf6);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  border-radius: inherit;
+  left: 0.85rem;
+  width: 16px;
+  height: 16px;
+  color: #aaa;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
-.ctaButton:hover::before {
-  opacity: 1;
+.input {
+  width: 100%;
+  padding: 0.75rem 0.85rem 0.75rem 2.5rem;
+  border: 1.5px solid #e8e8e5;
+  border-radius: 12px;
+  background-color: #fafaf8;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.ctaButton span,
-.ctaButton svg {
-  position: relative;
-  z-index: 1;
+.input::placeholder {
+  color: #bbb;
 }
 
-.ctaArrow {
-  width: 15px;
-  height: 15px;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+.input:focus {
+  border-color: #ffbb5c;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 187, 92, 0.18);
 }
 
-.ctaButton:hover .ctaArrow {
-  transform: translateX(4px);
+.select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
 }
 
-@keyframes slideUpBlur {
-  0% {
-    opacity: 0;
-    filter: blur(10px);
-    transform: translateY(25px);
+.submitButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.5rem;
+  background-color: #1a1a1a;
+  color: #f7f6f2;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    transform 0.15s ease,
+    box-shadow 0.25s ease;
+}
+
+.submitButton:hover {
+  background-color: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.arrow {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.submitButton:hover .arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 1200px) {
+  .hero {
+    padding: 1rem;
   }
-  100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-  }
 }
 
-@keyframes fillBar {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@media (max-width: 1024px) {
-  .top {
+@media (max-width: 1000px) {
+  .heroContent {
+    display: block;
     flex-direction: column;
-    gap: 2rem;
-  }
-
-  .hero {
-    padding: 6rem 4rem;
-    gap: 3rem;
-  }
-
-  .slogan {
-    font-size: 4.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    padding: 4rem 2rem 3rem;
-    min-height: unset;
-    gap: 3rem;
-    align-items: flex-start;
-  }
-
-  .sloganContainer {
-    flex: unset;
-    width: 100%;
-  }
-
-  .slogan {
-    font-size: 3.5rem;
-    letter-spacing: -1px;
-  }
-
-  .adjunctWrapper {
-    border-bottom-width: 9px;
-  }
-
-  .sliderContainer {
-    max-width: 100%;
-    width: 100%;
-    flex: unset;
-  }
-
-  .frameAccent {
-    top: 10px;
-    left: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    padding: 3rem 1.5rem 2.5rem;
     gap: 2.5rem;
   }
 
-  .slogan {
-    font-size: 2.8rem;
-    letter-spacing: -0.5px;
+  .headline {
+    font-size: 3rem;
   }
 
-  .adjunctWrapper {
-    border-bottom-width: 7px;
+  .rentalForm {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formGrid {
+    grid-template-columns: 1fr;
   }
 
-  .carModel {
-    font-size: 0.85rem;
-  }
-
-  .carPrice {
-    font-size: 0.95rem;
+  .wide {
+    grid-column: 1;
   }
 }
