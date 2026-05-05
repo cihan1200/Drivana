@@ -11,20 +11,28 @@ import axiosApi from "./api/axiosApi";
 export default function App() {
   const [isServerReady, setIsServerReady] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showWakeUpScreen, setShowWakeUpScreen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    const delayTimer = setTimeout(() => {
+      if (isMounted) {
+        setShowWakeUpScreen(true);
+      }
+    }, 1000);
 
     const wakeUpServer = async () => {
       try {
         await axiosApi.get("/");
 
         if (isMounted) {
+          clearTimeout(delayTimer);
           setIsServerReady(true);
         }
       } catch (error) {
         console.error("Failed to reach server:", error);
         if (isMounted) {
+          clearTimeout(delayTimer);
           setHasError(true);
         }
       }
@@ -34,6 +42,7 @@ export default function App() {
 
     return () => {
       isMounted = false;
+      clearTimeout(delayTimer);
     };
   }, []);
 
@@ -47,7 +56,10 @@ export default function App() {
   }
 
   if (!isServerReady) {
-    return <ServerWakeUp />;
+    if (showWakeUpScreen) {
+      return <ServerWakeUp />;
+    }
+    return null;
   }
 
   return (
