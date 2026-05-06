@@ -11,7 +11,6 @@ import axiosApi from "../../api/axiosApi";
 const ITEMS_PER_PAGE = 12;
 const STAR_COUNT = 5;
 
-// Exact StarRating from CarsPage
 function StarRating({ score }) {
   return (
     <span className={styles.stars} aria-label={`${score} out of 5`}>
@@ -38,7 +37,6 @@ function StarRating({ score }) {
   );
 }
 
-// Exact SkeletonCard from CarsPage
 function SkeletonCard() {
   return (
     <div className={styles.skeleton}>
@@ -227,7 +225,6 @@ export default function FeaturedFleet() {
           </div>
 
           <div className={styles.pagination}>
-            {/* Pagination buttons remain unchanged */}
             <button
               className={styles.paginationArrow}
               onClick={() => goToPage(currentPage - 1)}

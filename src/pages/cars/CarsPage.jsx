@@ -50,9 +50,7 @@ function CarCard({ car }) {
           className={styles.cardImage}
           loading="lazy"
           onError={(e) => {
-            // Use the car's ID as a seed so the same car always gets the same fallback image
             e.currentTarget.src = `https://picsum.photos/seed/${car._id}/1000`;
-            // Prevent infinite loops in case the fallback image also fails
             e.currentTarget.onerror = null;
           }}
         />
@@ -190,7 +188,6 @@ export default function CarsPage() {
       <Header />
 
       <main className={styles.main}>
-        {/* ── Search summary ── */}
         <section className={styles.summaryBar}>
           <div className={styles.summaryLeft}>
             <h1 className={styles.summaryTitle}>
@@ -257,7 +254,6 @@ export default function CarsPage() {
           </div>
         </section>
 
-        {/* ── Content ── */}
         {error ? (
           <div className={styles.stateBox}>
             <span className={styles.stateIcon}>⚠️</span>

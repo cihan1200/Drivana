@@ -28,10 +28,9 @@
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem; /* Increased gap slightly to match the better layout spacing */
+  gap: 1.5rem;
 }
 
-/* ── New Card Styles from CarsPage ── */
 .card {
   display: flex;
   flex-direction: column;
@@ -193,7 +192,6 @@
   letter-spacing: 0.03em;
 }
 
-/* ── New Skeleton Styles from CarsPage ── */
 @keyframes shimmer {
   0% {
     background-position: -400px 0;
@@ -232,7 +230,6 @@
   animation: shimmer 1.4s infinite;
 }
 
-/* ── State & Error Container ── */
 .stateContainer {
   display: flex;
   flex-direction: column;
@@ -264,7 +261,6 @@
   color: #f7f6f2;
 }
 
-/* ── Pagination ── */
 .pagination {
   display: flex;
   align-items: center;
@@ -350,7 +346,6 @@
   user-select: none;
 }
 
-/* ── Media Queries ── */
 @media (max-width: 1200px) {
   .featuredFleet {
     padding: 1rem;

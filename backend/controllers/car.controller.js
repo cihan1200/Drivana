@@ -11,7 +11,6 @@ export const reserveCar = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields." });
     }
 
-    // --- NEW: Prevent duplicate reservations ---
     const existingReservation = await Reservation.findOne({
       car: id,
       user: userId,
@@ -21,7 +20,6 @@ export const reserveCar = async (req, res) => {
         .status(400)
         .json({ message: "You have already reserved this car." });
     }
-    // -----------------------------------------
 
     const car = await Car.findById(id);
     if (!car) {
@@ -60,7 +58,6 @@ export const reserveCar = async (req, res) => {
   }
 };
 
-// --- NEW: Check reservation status ---
 export const checkReservation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,7 +74,6 @@ export const checkReservation = async (req, res) => {
   }
 };
 
-// --- NEW: Cancel reservation ---
 export const cancelReservation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,7 +104,6 @@ export const getCars = async (req, res) => {
 
     const filter = {};
 
-    // --- Location filter (case-insensitive partial match) ---
     if (req.query.pickupLocation) {
       filter.location = {
         $regex: req.query.pickupLocation.trim(),
@@ -116,8 +111,6 @@ export const getCars = async (req, res) => {
       };
     }
 
-    // --- Availability filter ---
-    // The car must have at least one window that fully contains [pickupDate, returnDate]
     if (req.query.pickupDate && req.query.returnDate) {
       const pickupDate = new Date(req.query.pickupDate);
       const returnDate = new Date(req.query.returnDate);
@@ -136,7 +129,6 @@ export const getCars = async (req, res) => {
       }
     }
 
-    // --- Car class filter ---
     if (req.query.carClass) {
       filter["specs.class"] = req.query.carClass;
     }

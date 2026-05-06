@@ -67,7 +67,6 @@ export default function CarDetailPage() {
   const [isDaily, setIsDaily] = useState(false);
   const [reservation, setReservation] = useState(null);
 
-  // New state for the confirmation modal
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -739,7 +738,6 @@ export default function CarDetailPage() {
       </div>
       <Footer />
 
-      {/* Confirmation Modal integrated here */}
       <ConfirmationModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}

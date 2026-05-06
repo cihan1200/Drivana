@@ -61,7 +61,6 @@ export default function Hero() {
     params.set("pickupDate", formData.pickupDate);
     params.set("returnDate", formData.returnDate);
 
-    // Only append carClass when user actually selected one
     if (formData.carClass) {
       params.set("carClass", formData.carClass);
     }

@@ -7,7 +7,6 @@ const reviewSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-// A single window when the car is available for rental
 const availabilitySchema = new mongoose.Schema({
   from: { type: Date, required: true },
   to: { type: Date, required: true },
@@ -37,13 +36,11 @@ const carSchema = new mongoose.Schema(
     images: [{ type: String }],
     reviews: [reviewSchema],
     features: [{ type: String }],
-    // Where the car is stationed / can be picked up
     location: {
       type: String,
       required: true,
       trim: true,
     },
-    // Date windows during which the car can be rented
     availability: [availabilitySchema],
     specs: {
       fuelType: { type: String },
@@ -58,7 +55,6 @@ const carSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Index for fast availability + class queries
 carSchema.index({ location: 1 });
 carSchema.index({ "specs.class": 1 });
 carSchema.index({ "availability.from": 1, "availability.to": 1 });
