@@ -1,5 +1,6 @@
 import styles from "./Hero.module.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CAR_CLASSES = [
   "Economy",
@@ -12,7 +13,26 @@ const CAR_CLASSES = [
   "Classic",
 ];
 
+const LOCATIONS = [
+  "New York",
+  "Los Angeles",
+  "Chicago",
+  "Miami",
+  "San Francisco",
+  "Las Vegas",
+  "Dallas",
+  "Boston",
+  "Seattle",
+  "Atlanta",
+  "Denver",
+  "Orlando",
+  "Phoenix",
+  "Austin",
+  "Nashville",
+];
+
 export default function Hero() {
+  const navigate = useNavigate();
   const [sameReturn, setSameReturn] = useState(true);
   const [formData, setFormData] = useState({
     pickupLocation: "",
@@ -28,12 +48,25 @@ export default function Hero() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      ...formData,
-      returnLocation: sameReturn
-        ? formData.pickupLocation
-        : formData.returnLocation,
-    });
+
+    const params = new URLSearchParams();
+
+    params.set("pickupLocation", formData.pickupLocation.trim());
+    params.set(
+      "returnLocation",
+      sameReturn
+        ? formData.pickupLocation.trim()
+        : formData.returnLocation.trim(),
+    );
+    params.set("pickupDate", formData.pickupDate);
+    params.set("returnDate", formData.returnDate);
+
+    // Only append carClass when user actually selected one
+    if (formData.carClass) {
+      params.set("carClass", formData.carClass);
+    }
+
+    navigate(`/cars?${params.toString()}`);
   };
 
   return (
@@ -84,15 +117,22 @@ export default function Hero() {
                   <circle cx="12" cy="13" r="3" />
                   <path d="M12 3V5" strokeLinecap="round" />
                 </svg>
-                <input
-                  type="text"
+                <select
                   name="pickupLocation"
-                  className={styles.input}
-                  placeholder="City, airport or address"
+                  className={`${styles.input} ${styles.select}`}
                   value={formData.pickupLocation}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="" disabled>
+                    City, airport or address
+                  </option>
+                  {LOCATIONS.map((loc) => (
+                    <option key={loc} value={loc}>
+                      {loc}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -111,15 +151,22 @@ export default function Hero() {
                     <circle cx="12" cy="13" r="3" fill="currentColor" />
                     <path d="M12 3V5" strokeLinecap="round" />
                   </svg>
-                  <input
-                    type="text"
+                  <select
                     name="returnLocation"
-                    className={styles.input}
-                    placeholder="City, airport or address"
+                    className={`${styles.input} ${styles.select}`}
                     value={formData.returnLocation}
                     onChange={handleChange}
                     required={!sameReturn}
-                  />
+                  >
+                    <option value="" disabled>
+                      City, airport or address
+                    </option>
+                    {LOCATIONS.map((loc) => (
+                      <option key={loc} value={loc}>
+                        {loc}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             )}
@@ -142,6 +189,7 @@ export default function Hero() {
                   name="pickupDate"
                   className={styles.input}
                   value={formData.pickupDate}
+                  min={new Date().toISOString().split("T")[0]}
                   onChange={handleChange}
                   required
                 />
@@ -166,6 +214,10 @@ export default function Hero() {
                   name="returnDate"
                   className={styles.input}
                   value={formData.returnDate}
+                  min={
+                    formData.pickupDate ||
+                    new Date().toISOString().split("T")[0]
+                  }
                   onChange={handleChange}
                   required
                 />
@@ -196,11 +248,8 @@ export default function Hero() {
                   className={`${styles.input} ${styles.select}`}
                   value={formData.carClass}
                   onChange={handleChange}
-                  required
                 >
-                  <option value="" disabled>
-                    Any class
-                  </option>
+                  <option value="">Any class</option>
                   {CAR_CLASSES.map((cls) => (
                     <option key={cls} value={cls}>
                       {cls}

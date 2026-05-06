@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
+import CarsPage from "./pages/cars/CarsPage";
 import CarDetailsPage from "./pages/car_details/CarDetailsPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
@@ -66,6 +67,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/cars" element={<CarsPage />} />
         <Route path="/cars/:id" element={<CarDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

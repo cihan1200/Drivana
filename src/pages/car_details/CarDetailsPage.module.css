@@ -375,10 +375,49 @@
   box-shadow: 0 0 0 3px rgba(255, 187, 92, 0.18);
 }
 
-.dateRow {
+.bookingInput:disabled {
+  background-color: #f0efeb;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.bookingInput[readonly] {
+  background-color: #f0efeb;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.bookingInput[readonly]:focus {
+  border-color: #e8e8e5;
+  box-shadow: none;
+}
+
+.select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+.select:disabled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.dailyToggle {
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dailyToggle input {
+  cursor: pointer;
 }
 
 .reserveButton {
@@ -404,14 +443,19 @@
     box-shadow 0.25s ease;
 }
 
-.reserveButton:hover {
+.reserveButton:hover:not(:disabled) {
   background-color: #333;
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-.reserveButton:active {
+.reserveButton:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.reserveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .bookingNote {
@@ -437,6 +481,15 @@
   border-top-color: #333;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+}
+
+.spinnerSmall {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -471,51 +524,6 @@
 .retryButton:hover {
   background-color: #333;
   color: #f7f6f2;
-}
-
-@media (max-width: 1100px) {
-  .content {
-    grid-template-columns: 1fr 340px;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .content {
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-  }
-
-  .rightCol {
-    position: static;
-  }
-
-  .heroImage {
-    height: 360px;
-  }
-
-  .specsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .backButton {
-    margin: 1rem;
-  }
-
-  .heroImage {
-    height: 240px;
-  }
-
-  .specsGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .dateRow {
-    grid-template-columns: 1fr;
-  }
 }
 
 .galleryArrow {
@@ -819,7 +827,133 @@
   user-select: none;
 }
 
+.floatingAlert {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  opacity: 0;
+  animation: slideUpFadeInOut 2.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFadeInOut {
+  0% {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
+}
+
+.alertIcon {
+  font-size: 1.1rem;
+}
+
+.alert-success {
+  background-color: #1a1a1a;
+  color: #fafaf8;
+  border: 1px solid #333;
+}
+
+.alert-success .alertIcon {
+  color: #a7f3d0;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alert-error .alertIcon {
+  color: #ef4444;
+}
+
+.reservedActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.reservedBtn {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  cursor: default !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.cancelButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem;
+  background-color: transparent;
+  color: #ef4444;
+  border: 1.5px solid #ef4444;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: #fef2f2;
+}
+
+.cancelButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .content {
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 900px) {
+  .content {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  .rightCol {
+    position: static;
+  }
+
+  .heroImage {
+    height: 360px;
+  }
+
+  .specsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .thumbnailStrip {
     padding: 1rem 1rem 0;
   }
@@ -831,6 +965,15 @@
 }
 
 @media (max-width: 600px) {
+  .heroImage {
+    height: 240px;
+  }
+
+  .specsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
   .thumbnailStrip {
     display: none;
   }

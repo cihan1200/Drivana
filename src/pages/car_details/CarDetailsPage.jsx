@@ -12,33 +12,29 @@ import {
   faSnowflake,
   faShield,
   faCircleCheck,
+  faCheckCircle,
+  faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import axiosApi from "../../api/axiosApi";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
+import ConfirmationModal from "../../components/confirmation_modal/ConfirmationModal";
 
 const REVIEWS_PER_PAGE = 10;
 
 function buildPageItems(currentPage, totalPages) {
-  if (totalPages <= 7) {
+  if (totalPages <= 7)
     return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
   const items = new Set([1, totalPages, currentPage]);
   if (currentPage - 1 > 1) items.add(currentPage - 1);
   if (currentPage + 1 < totalPages) items.add(currentPage + 1);
-
   const sorted = [...items].sort((a, b) => a - b);
   const result = [];
-
   for (let i = 0; i < sorted.length; i++) {
     result.push(sorted[i]);
     const next = sorted[i + 1];
-    if (next !== undefined && next - sorted[i] > 1) {
-      result.push("...");
-    }
+    if (next !== undefined && next - sorted[i] > 1) result.push("...");
   }
-
   return result;
 }
 
@@ -66,14 +62,24 @@ export default function CarDetailPage() {
   const [reviewPage, setReviewPage] = useState(1);
   const reviewsRef = useRef(null);
 
+  const [isLoadingBooking, setIsLoadingBooking] = useState(false);
+  const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
+  const [isDaily, setIsDaily] = useState(false);
+  const [reservation, setReservation] = useState(null);
+
+  // New state for the confirmation modal
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     pickupLocation: "",
-    pickupDate: "",
-    returnDate: "",
+    selectedWindowIndex: "",
   });
 
+  const storedUser = localStorage.getItem("drivana_user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
   useEffect(() => {
-    const fetchCar = async () => {
+    const fetchCarAndReservation = async () => {
       setLoading(true);
       setError(null);
       setActiveImage(0);
@@ -81,6 +87,16 @@ export default function CarDetailPage() {
       try {
         const { data } = await axiosApi.get(`/cars/${id}`);
         setCar(data);
+        setFormData((prev) => ({ ...prev, pickupLocation: data.location }));
+
+        if (user) {
+          const resStatus = await axiosApi.get(
+            `/cars/${id}/check-reservation?userId=${user._id}`,
+          );
+          if (resStatus.data.reserved) {
+            setReservation(resStatus.data.reservation);
+          }
+        }
       } catch (err) {
         setError("Failed to load car details. Please try again.");
       } finally {
@@ -88,16 +104,104 @@ export default function CarDetailPage() {
       }
     };
 
-    fetchCar();
+    fetchCarAndReservation();
   }, [id]);
 
   const handleChange = (e) => {
+    setStatusMessage({ type: "", text: "" });
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleDailyToggle = (e) => {
+    setIsDaily(e.target.checked);
+    if (e.target.checked) {
+      setFormData((prev) => ({ ...prev, selectedWindowIndex: "" }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ carId: id, ...formData });
+
+    if (!user) {
+      setStatusMessage({
+        type: "error",
+        text: "Please log in to reserve a car.",
+      });
+      setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
+      return;
+    }
+
+    let start, end;
+
+    if (isDaily) {
+      start = new Date();
+      end = new Date();
+    } else {
+      if (formData.selectedWindowIndex === "") {
+        setStatusMessage({
+          type: "error",
+          text: "Please select a booking window.",
+        });
+        setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
+        return;
+      }
+      const selectedWindow = car.availability[formData.selectedWindowIndex];
+      start = new Date(selectedWindow.from);
+      end = new Date(selectedWindow.to);
+    }
+
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) || 1;
+    const totalPrice = days * (car.specs?.pricePerDay || 0);
+
+    try {
+      setIsLoadingBooking(true);
+      setStatusMessage({ type: "", text: "" });
+
+      const response = await axiosApi.post(`/cars/${id}/reserve`, {
+        userId: user._id,
+        pickupLocation: formData.pickupLocation,
+        pickupDate: start,
+        returnDate: end,
+        totalPrice,
+      });
+
+      setStatusMessage({
+        type: "success",
+        text: "Reservation successful!",
+      });
+      setReservation(response.data.result);
+      setFormData((prev) => ({ ...prev, selectedWindowIndex: "" }));
+      setIsDaily(false);
+    } catch (err) {
+      setStatusMessage({
+        type: "error",
+        text: err.response?.data?.message || "Failed to reserve car.",
+      });
+    } finally {
+      setIsLoadingBooking(false);
+      setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
+    }
+  };
+
+  const handleCancelReservation = async () => {
+    try {
+      setIsLoadingBooking(true);
+      await axiosApi.delete(
+        `/cars/${id}/cancel-reservation?userId=${user._id}`,
+      );
+      setReservation(null);
+      setIsCancelModalOpen(false);
+      setStatusMessage({ type: "success", text: "Reservation cancelled." });
+    } catch (err) {
+      setIsCancelModalOpen(false);
+      setStatusMessage({
+        type: "error",
+        text: "Failed to cancel reservation.",
+      });
+    } finally {
+      setIsLoadingBooking(false);
+      setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
+    }
   };
 
   const renderStars = (score, small = false) => {
@@ -153,11 +257,7 @@ export default function CarDetailPage() {
     e.preventDefault();
     const x = e.pageX - thumbnailRef.current.offsetLeft;
     const walk = (x - startX) * 2;
-
-    if (Math.abs(walk) > 5) {
-      setIsDraggingThumbnails(true);
-    }
-
+    if (Math.abs(walk) > 5) setIsDraggingThumbnails(true);
     thumbnailRef.current.scrollLeft = scrollLeftPos - walk;
   };
 
@@ -172,7 +272,6 @@ export default function CarDetailPage() {
   const goToReviewPage = (page) => {
     if (page < 1 || page > totalReviewPages) return;
     setReviewPage(page);
-
     if (reviewsRef.current) {
       const offset = -70;
       const elementPosition = reviewsRef.current.getBoundingClientRect().top;
@@ -235,7 +334,9 @@ export default function CarDetailPage() {
       <div className={styles.page}>
         <div className={styles.heroWrap}>
           <img
-            className={`${styles.heroImageBg} ${imageLoaded ? styles.heroImageVisible : ""}`}
+            className={`${styles.heroImageBg} ${
+              imageLoaded ? styles.heroImageVisible : ""
+            }`}
             src={carImages[activeImage]}
             alt=""
             aria-hidden="true"
@@ -246,7 +347,9 @@ export default function CarDetailPage() {
           />
 
           <img
-            className={`${styles.heroImage} ${imageLoaded ? styles.heroImageVisible : ""}`}
+            className={`${styles.heroImage} ${
+              imageLoaded ? styles.heroImageVisible : ""
+            }`}
             src={carImages[activeImage]}
             alt={car.name}
             onLoad={() => setImageLoaded(true)}
@@ -280,7 +383,9 @@ export default function CarDetailPage() {
                   {carImages.map((_, i) => (
                     <button
                       key={i}
-                      className={`${styles.galleryDot} ${i === activeImage ? styles.galleryDotActive : ""}`}
+                      className={`${styles.galleryDot} ${
+                        i === activeImage ? styles.galleryDotActive : ""
+                      }`}
                       onClick={() => goToImage(i)}
                       aria-label={`Go to image ${i + 1}`}
                     />
@@ -302,7 +407,9 @@ export default function CarDetailPage() {
 
         {carImages.length > 1 && (
           <div
-            className={`${styles.thumbnailStrip} ${isDraggingThumbnails ? styles.isDragging : ""}`}
+            className={`${styles.thumbnailStrip} ${
+              isDraggingThumbnails ? styles.isDragging : ""
+            }`}
             ref={thumbnailRef}
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseLeave}
@@ -312,7 +419,9 @@ export default function CarDetailPage() {
             {carImages.map((src, i) => (
               <button
                 key={i}
-                className={`${styles.thumbnail} ${i === activeImage ? styles.thumbnailActive : ""}`}
+                className={`${styles.thumbnail} ${
+                  i === activeImage ? styles.thumbnailActive : ""
+                }`}
                 onClick={(e) => {
                   if (isDraggingThumbnails) {
                     e.preventDefault();
@@ -533,71 +642,95 @@ export default function CarDetailPage() {
                       type="text"
                       name="pickupLocation"
                       className={styles.bookingInput}
-                      placeholder="City, airport or address"
                       value={formData.pickupLocation}
-                      onChange={handleChange}
+                      readOnly
                       required
                     />
                   </div>
                 </div>
 
-                <div className={styles.dateRow}>
-                  <div className={styles.bookingField}>
-                    <label className={styles.bookingLabel}>Pick-up Date</label>
-                    <div className={styles.bookingInputWrap}>
-                      <svg
-                        className={styles.bookingInputIcon}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      >
-                        <rect x="3" y="4" width="18" height="17" rx="2" />
-                        <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
-                      </svg>
-                      <input
-                        type="date"
-                        name="pickupDate"
-                        className={styles.bookingInput}
-                        value={formData.pickupDate}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
+                <div className={styles.bookingField}>
+                  <label className={styles.bookingLabel}>Available Dates</label>
+                  <div className={styles.bookingInputWrap}>
+                    <svg
+                      className={styles.bookingInputIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    >
+                      <rect x="3" y="4" width="18" height="17" rx="2" />
+                      <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
+                    </svg>
+                    <select
+                      name="selectedWindowIndex"
+                      className={`${styles.bookingInput} ${styles.select}`}
+                      value={formData.selectedWindowIndex}
+                      onChange={handleChange}
+                      disabled={isDaily}
+                      required={!isDaily}
+                    >
+                      <option value="" disabled>
+                        Select dates...
+                      </option>
+                      {car.availability?.map((w, idx) => (
+                        <option key={idx} value={idx}>
+                          {formatDate(w.from)} to {formatDate(w.to)}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  <div className={styles.bookingField}>
-                    <label className={styles.bookingLabel}>Return Date</label>
-                    <div className={styles.bookingInputWrap}>
-                      <svg
-                        className={styles.bookingInputIcon}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      >
-                        <rect x="3" y="4" width="18" height="17" rx="2" />
-                        <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
-                      </svg>
-                      <input
-                        type="date"
-                        name="returnDate"
-                        className={styles.bookingInput}
-                        value={formData.returnDate}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
+                  <label className={styles.dailyToggle}>
+                    <input
+                      type="checkbox"
+                      checked={isDaily}
+                      onChange={handleDailyToggle}
+                    />
+                    <span>Daily Reservation (Today)</span>
+                  </label>
                 </div>
 
-                <button type="submit" className={styles.reserveButton}>
-                  <FontAwesomeIcon icon={faShield} />
-                  <span>Reserve Now</span>
-                </button>
+                {reservation ? (
+                  <div className={styles.reservedActions}>
+                    <button
+                      type="button"
+                      className={`${styles.reserveButton} ${styles.reservedBtn}`}
+                      disabled
+                    >
+                      <FontAwesomeIcon icon={faCheckCircle} />
+                      <span>Reserved</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.cancelButton}
+                      onClick={() => setIsCancelModalOpen(true)}
+                      disabled={isLoadingBooking}
+                    >
+                      Cancel Reservation
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    className={styles.reserveButton}
+                    disabled={isLoadingBooking}
+                  >
+                    {isLoadingBooking ? (
+                      <div className={styles.spinnerSmall} />
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faShield} />
+                        <span>Reserve Now</span>
+                      </>
+                    )}
+                  </button>
+                )}
 
                 <p className={styles.bookingNote}>
-                  Free cancellation · No credit card charge today
+                  {reservation
+                    ? "You can cancel this reservation at any time."
+                    : "Free cancellation · No credit card charge today"}
                 </p>
               </form>
             </div>
@@ -605,6 +738,37 @@ export default function CarDetailPage() {
         </div>
       </div>
       <Footer />
+
+      {/* Confirmation Modal integrated here */}
+      <ConfirmationModal
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)}
+        onConfirm={handleCancelReservation}
+        title="Cancel Reservation"
+        message="Are you sure you want to cancel your reservation for this car? This action cannot be undone."
+        confirmText="Yes, Cancel"
+        cancelText="No, Keep It"
+        isDestructive={true}
+        isLoading={isLoadingBooking}
+      />
+
+      {statusMessage.text && (
+        <div
+          className={`${styles.floatingAlert} ${
+            styles[`alert-${statusMessage.type}`]
+          }`}
+        >
+          <FontAwesomeIcon
+            icon={
+              statusMessage.type === "success"
+                ? faCheckCircle
+                : faCircleExclamation
+            }
+            className={styles.alertIcon}
+          />
+          <span>{statusMessage.text}</span>
+        </div>
+      )}
     </>
   );
 }
