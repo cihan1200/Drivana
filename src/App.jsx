@@ -6,6 +6,8 @@ import CarDetailsPage from "./pages/car_details/CarDetailsPage";
 import LoginPage from "./pages/login/LoginPage";
 import SignupPage from "./pages/signup/SignupPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import MyBookingsPage from "./pages/my_bookings/MyBookingsPage";
+import LocationsPage from "./pages/locations/LocationsPage";
 import ServerWakeUp from "./components/server_wakeup/ServerWakeup";
 import axiosApi from "./api/axiosApi";
 
@@ -72,6 +74,8 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/bookings" element={<MyBookingsPage />} />
+        <Route path="/locations" element={<LocationsPage />} />
       </Routes>
     </BrowserRouter>
   );

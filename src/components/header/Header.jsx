@@ -87,8 +87,8 @@ export default function Header() {
         </div>
         <nav className={styles.navLinks}>
           <a href="/#">Book a car</a>
-          <a href="/#">Manage</a>
-          <a href="/#">Locations</a>
+          <a href="/bookings">Manage</a>
+          <a href="/locations">Locations</a>
         </nav>
 
         <div className={styles.ctas}>
@@ -128,7 +128,7 @@ export default function Header() {
 
                 <button
                   className={styles.menuItem}
-                  onClick={() => navigate("/#")}
+                  onClick={() => navigate("/bookings")}
                 >
                   <FontAwesomeIcon
                     icon={faCalendarCheck}
@@ -201,10 +201,10 @@ export default function Header() {
           isMobileMenuOpen ? styles.mobileMenuOpen : ""
         }`}
       >
-        <a href="/rent">
+        <a href="/#">
           <FontAwesomeIcon icon={faCar} /> Book a car
         </a>
-        <a href="/manage">
+        <a href="/bookings">
           <FontAwesomeIcon icon={faPenToSquare} /> Manage
         </a>
         <a href="/locations">

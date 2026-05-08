@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import carRouter from "./routes/car.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import reservationRouter from "./routes/reservation.routes.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.get("/api", (req, res) => {
 
 app.use("/api/cars", carRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/reservations", reservationRouter);
 
 async function start() {
   try {

@@ -11,9 +11,11 @@ export const reserveCar = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields." });
     }
 
+    // Only look for active/confirmed reservations to block re-booking
     const existingReservation = await Reservation.findOne({
       car: id,
       user: userId,
+      status: "confirmed", // <-- Added check
     });
     if (existingReservation) {
       return res
@@ -65,7 +67,12 @@ export const checkReservation = async (req, res) => {
 
     if (!userId) return res.json({ reserved: false });
 
-    const reservation = await Reservation.findOne({ car: id, user: userId });
+    // Only return true if the reservation is confirmed
+    const reservation = await Reservation.findOne({
+      car: id,
+      user: userId,
+      status: "confirmed",
+    }); // <-- Added status check
     res.json({ reserved: !!reservation, reservation });
   } catch (err) {
     res
@@ -79,13 +86,31 @@ export const cancelReservation = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.query;
 
-    const deleted = await Reservation.findOneAndDelete({
+    // Find the active reservation instead of deleting it immediately
+    const reservation = await Reservation.findOne({
       car: id,
       user: userId,
+      status: "confirmed",
     });
 
-    if (!deleted) {
+    if (!reservation) {
       return res.status(404).json({ message: "Reservation not found." });
+    }
+
+    // Update status to cancelled
+    reservation.status = "cancelled";
+    await reservation.save();
+
+    // Fetch all cancelled reservations for this user, newest first
+    const cancelledReservations = await Reservation.find({
+      user: userId,
+      status: "cancelled",
+    }).sort({ createdAt: -1 });
+
+    // If there are more than 10, delete the older ones
+    if (cancelledReservations.length > 10) {
+      const idsToDelete = cancelledReservations.slice(10).map((r) => r._id);
+      await Reservation.deleteMany({ _id: { $in: idsToDelete } });
     }
 
     res.json({ message: "Reservation cancelled successfully." });

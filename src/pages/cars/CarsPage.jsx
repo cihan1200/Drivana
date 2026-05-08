@@ -160,6 +160,7 @@ export default function CarsPage() {
   }, [pickupLocation, pickupDate, returnDate, carClass, sort, page]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchCars();
   }, [fetchCars]);
 

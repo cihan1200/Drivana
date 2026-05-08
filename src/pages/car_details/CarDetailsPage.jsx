@@ -61,14 +61,11 @@ export default function CarDetailPage() {
   const [scrollLeftPos, setScrollLeftPos] = useState(0);
   const [reviewPage, setReviewPage] = useState(1);
   const reviewsRef = useRef(null);
-
   const [isLoadingBooking, setIsLoadingBooking] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
   const [isDaily, setIsDaily] = useState(false);
   const [reservation, setReservation] = useState(null);
-
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-
   const [formData, setFormData] = useState({
     pickupLocation: "",
     selectedWindowIndex: "",
@@ -78,6 +75,8 @@ export default function CarDetailPage() {
   const user = storedUser ? JSON.parse(storedUser) : null;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchCarAndReservation = async () => {
       setLoading(true);
       setError(null);
@@ -281,10 +280,14 @@ export default function CarDetailPage() {
 
   if (loading) {
     return (
-      <div className={styles.stateContainer}>
-        <div className={styles.spinner} />
-        <span className={styles.stateText}>Loading car details…</span>
-      </div>
+      <>
+        <Header />
+        <div className={styles.stateContainer}>
+          <div className={styles.spinner} />
+          <span className={styles.stateText}>Loading car details…</span>
+        </div>
+        <Footer />
+      </>
     );
   }
 
