@@ -31,7 +31,6 @@ export const updateReservation = async (req, res) => {
         .json({ message: "Return date must be after pickup date." });
     }
 
-    // Validate against car availability
     const reservation =
       await Reservation.findById(reservationId).populate("car");
     if (!reservation) {
