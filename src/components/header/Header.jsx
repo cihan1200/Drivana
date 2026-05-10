@@ -2,7 +2,7 @@ import styles from "./Header.module.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   faBars,
   faCar,
@@ -86,9 +86,9 @@ export default function Header() {
           </a>
         </div>
         <nav className={styles.navLinks}>
-          <a href="/#">Book a car</a>
-          <a href="/bookings">Manage</a>
-          <a href="/locations">Locations</a>
+          <Link to="/">Book a car</Link>
+          <Link to="/bookings">Manage</Link>
+          <Link to="/locations">Locations</Link>
         </nav>
 
         <div className={styles.ctas}>
@@ -201,15 +201,15 @@ export default function Header() {
           isMobileMenuOpen ? styles.mobileMenuOpen : ""
         }`}
       >
-        <a href="/#">
+        <Link to="/">
           <FontAwesomeIcon icon={faCar} /> Book a car
-        </a>
-        <a href="/bookings">
+        </Link>
+        <Link to="/bookings">
           <FontAwesomeIcon icon={faPenToSquare} /> Manage
-        </a>
-        <a href="/locations">
+        </Link>
+        <Link to="/locations">
           <FontAwesomeIcon icon={faLocation} /> Locations
-        </a>
+        </Link>
       </nav>
     </>
   );
